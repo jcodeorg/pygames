@@ -5,11 +5,9 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Click to change text")
 
-# 日本語フォント（小さめ）
-font = pygame.font.Font("C:/Windows/Fonts/meiryo.ttc", 24)
-if not font:
-    # 日本語フォント Noto Sans CJK JP を試す
-    font = pygame.font.SysFont('notosanscjkjp', 24)
+# 日本語フォント Noto Sans CJK JP を試す
+font = pygame.font.SysFont('notosanscjkjp', 24)
+# font = pygame.font.Font("C:/Windows/Fonts/meiryo.ttc", 24)
 
 # ボタンの Rect（画面中央）
 button_rect = pygame.Rect(0, 0, 300, 100)
