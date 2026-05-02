@@ -5,9 +5,24 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Click to change text")
 
-# 日本語フォント Noto Sans CJK JP を試す
-font = pygame.font.SysFont('notosanscjkjp', 24)
-# font = pygame.font.Font("C:/Windows/Fonts/meiryo.ttc", 24)
+# 日本語フォントを取得する関数
+def get_jp_font(size):
+    # 1. Windows の Meiryo を試す
+    try:
+        return pygame.font.Font("C:/Windows/Fonts/meiryo.ttc", size)
+    except:
+        pass
+
+    # 2. Linux（Chromebook）の NotoSansCJKjp を試す
+    try:
+        return pygame.font.SysFont("NotoSansCJKjp", size)
+    except:
+        pass
+
+    # 3. 最後のフォールバック（日本語は豆腐になる可能性あり）
+    return pygame.font.SysFont(None, size)
+
+font = get_jp_font(24)
 
 # ボタンの Rect（画面中央）
 button_rect = pygame.Rect(0, 0, 300, 100)
