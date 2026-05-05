@@ -7,24 +7,16 @@ pygame.display.set_caption("Click to change text")
 
 # 日本語フォントを取得する関数
 def get_jp_font(size):
-    # 1. Windows の Meiryo を試す
-    try:
-        return pygame.font.Font("C:/Windows/Fonts/meiryo.ttc", size)
-    except:
-        print("Windows の Meiryo フォントが見つかりませんでした。")
-        pass
+    available_fonts = set(pygame.font.get_fonts())
+    preferred_fonts = ["meiryo", "notosansjp", "notosanscjkjp"]
 
-    # 2. あえて、Linux（Chromebook）の NotoSansCJKjp をファイル名で試す
-    try:
-        return pygame.font.Font("/usr/share/fonts/chromeos/notocjk/NotoSansCJK-Regular.ttc", size)
-        # return pygame.font.SysFont("NotoSansCJKjp", size)
-    except:
-        print("Linux の NotoSansCJK-Regular.ttc フォントが見つかりませんでした。")
-        pass
+    for font_name in preferred_fonts:
+        if font_name in available_fonts:
+            print(f"Using font: {font_name}")
+            return pygame.font.SysFont(font_name, size)
 
-    # 3. 名前で検索（日本語は豆腐になる可能性あり）
-    # return pygame.font.SysFont("notosansjp", size) # Windowsは、これで見つかる
-    return pygame.font.SysFont("notosanscjkjp", size) # Chromebookは、これで見つかる
+    print("日本語フォントが見つからなかったため、デフォルトフォントを使用します。")
+    return pygame.font.SysFont(None, size)
 
 font = get_jp_font(24)
 
