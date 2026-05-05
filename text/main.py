@@ -11,17 +11,20 @@ def get_jp_font(size):
     try:
         return pygame.font.Font("C:/Windows/Fonts/meiryo.ttc", size)
     except:
+        print("Windows の Meiryo フォントが見つかりませんでした。")
         pass
 
-    # 2. あえて、Linux（Chromebook）の NotoSansCJKjp をファイル名で試したい
+    # 2. あえて、Linux（Chromebook）の NotoSansCJKjp をファイル名で試す
     try:
-        # return pygame.font.SysFont("/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc", size)
-        return pygame.font.SysFont("NotoSansCJKjp", size)
+        return pygame.font.Font("/usr/share/fonts/chromeos/notocjk/NotoSansCJK-Regular.ttc", size)
+        # return pygame.font.SysFont("NotoSansCJKjp", size)
     except:
+        print("Linux の NotoSansCJK-Regular.ttc フォントが見つかりませんでした。")
         pass
 
-    # 3. 最後のフォールバック（日本語は豆腐になる可能性あり）
-    return pygame.font.SysFont(None, size)
+    # 3. 名前で検索（日本語は豆腐になる可能性あり）
+    # return pygame.font.SysFont("notosansjp", size) # Windowsは、これで見つかる
+    return pygame.font.SysFont("notosanscjkjp", size) # Chromebookは、これで見つかる
 
 font = get_jp_font(24)
 
