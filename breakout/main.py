@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 
+# 修正
+
 # 初期化
 pygame.init()
 
