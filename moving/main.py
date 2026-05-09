@@ -20,7 +20,7 @@ pygame.init()
 # 画面サイズを幅800、高さ600で作成します。
 screen = pygame.display.set_mode((800, 600))
 # ウィンドウのタイトル（キャプション）を設定します。
-pygame.display.set_caption("Rect move sample")
+pygame.display.set_caption("Rect move sample 四角が動くだけのサンプル")
 
 # ------------------ プレイヤー設定 ------------------
 # プレイヤーは四角（Rect）で表現します。
