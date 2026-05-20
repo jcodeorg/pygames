@@ -32,6 +32,14 @@ class MovingObject:
         self.rect.x += dx
         self.rect.y += dy
 
+    def move_x(self, dx):
+        """相対移動: dx 分だけ位置を変える"""
+        self.rect.x += dx
+
+    def move_y(self, dy):
+        """相対移動: dy 分だけ位置を変える"""
+        self.rect.y += dy
+
     def draw(self, screen):
         """画面に自分を四角で描画する"""
         pygame.draw.rect(screen, self.color, self.rect)
@@ -73,23 +81,23 @@ while running:
 
     # player1 は矢印キーで動く
     if keys[pygame.K_LEFT]:
-        player1.move(-SPEED, 0)
+        player1.move_x(-SPEED)
     if keys[pygame.K_RIGHT]:
-        player1.move(SPEED, 0)
+        player1.move_x(SPEED)
     if keys[pygame.K_UP]:
-        player1.move(0, -SPEED)
+        player1.move_y(-SPEED)
     if keys[pygame.K_DOWN]:
-        player1.move(0, SPEED)
+        player1.move_y(SPEED)
 
     # player2 は WASD で動く
     if keys[pygame.K_a]:
-        player2.move(-SPEED, 0)
+        player2.move_x(-SPEED)
     if keys[pygame.K_d]:
-        player2.move(SPEED, 0)
+        player2.move_x(SPEED)
     if keys[pygame.K_w]:
-        player2.move(0, -SPEED)
+        player2.move_y(-SPEED)
     if keys[pygame.K_s]:
-        player2.move(0, SPEED)
+        player2.move_y(SPEED)
 
     # 描画
     screen.fill((0, 0, 0))  # 背景を黒で消す
