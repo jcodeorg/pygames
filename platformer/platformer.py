@@ -28,31 +28,58 @@ MAX_FALL_SPEED = 12
 GOAL_WIDTH = 50
 GOAL_HEIGHT = 50
 
+# マップの設定
+MAP_WIDTH = 2500
+MAP_HEIGHT = SCREEN_HEIGHT
+
 # プレイヤーの画像ファイル
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PLAYER_IMG_PATH = os.path.join(BASE_DIR, "neko.png")
+BASE_DIR = os.path.dirname(__file__)
+PLAYER_IMG_PATH1 = os.path.join(BASE_DIR, "costume1.png")
+PLAYER_IMG_PATH2 = os.path.join(BASE_DIR, "costume2.png")
 
 # 足場の配置（横に長いステージ）
+# 足場のデータは (x, y, width, height) の形式で定義
+# 足場の数や配置を変更してみよう
+
 platforms_data = [
-    (0, SCREEN_HEIGHT - 40, 2500, 40), # 長い地面
+    (0, SCREEN_HEIGHT - 40, MAP_WIDTH, 40), # 長い地面
     (150, 450, 100, 20),
-    (350, 350, 100, 20),
-    (550, 250, 150, 20),
-    (800, 400, 100, 20),
-    (1050, 300, 200, 20),
-    (1350, 200, 100, 20),
-    (1550, 250, 150, 20),
-    (1800, 350, 150, 20)
+    (350, 450, 100, 20),
+    (550, 450, 150, 20),
+    (800, 450, 100, 20),
+    (1050, 450, 200, 20),
+    (1350, 450, 100, 20),
+    (1550, 450, 150, 20),
+    (1800, 450, 150, 20)
 ]
+
+# ゴールの配置
+# ゴールの位置は、マップの右端に配置する
+# ゴールの位置を変更して、プレイヤーが到達する距離を調整してみよう
+
+GOAL_X = MAP_WIDTH - GOAL_WIDTH - 50
+GOAL_Y = MAP_HEIGHT - GOAL_HEIGHT - 40
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.image.load(PLAYER_IMG_PATH).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.img1 = pygame.image.load(PLAYER_IMG_PATH1).convert_alpha()
+        self.img1 = pygame.transform.scale(self.img1, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.img2 = pygame.image.load(PLAYER_IMG_PATH2).convert_alpha()
+        self.img2 = pygame.transform.scale(self.img2, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.img3 = pygame.image.load(PLAYER_IMG_PATH1).convert_alpha()
+        self.img3 = pygame.transform.scale(self.img3, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.img3 = pygame.transform.flip(self.img3, True, False)
+        self.img4 = pygame.image.load(PLAYER_IMG_PATH2).convert_alpha()
+        self.img4 = pygame.transform.scale(self.img4, (PLAYER_WIDTH, PLAYER_HEIGHT))
+        self.img4 = pygame.transform.flip(self.img4, True, False)
+        self.frame_index = 0
+        self.frame = [self.img1, self.img2 , self.img3, self.img4]
+        self.image = self.frame[self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
-
+        self.animation_clock = 0
+        
         # 速度ベクトル
         self.vel_x = 0
         self.vel_y = 0
@@ -79,6 +106,16 @@ class Player(pygame.sprite.Sprite):
         self.vel_y += GRAVITY
         if self.vel_y > MAX_FALL_SPEED:
             self.vel_y = MAX_FALL_SPEED
+
+        # アニメーション
+        self.animation_clock += 1
+        if self.animation_clock >= 10 and self.vel_x != 0:  # 10フレームごとにアニメーションを切り替える
+            self.animation_clock = 0
+            self.frame_index ^= 1  # フレームを切り替える
+            if self.vel_x >0:
+                self.image = self.frame[self.frame_index]  # 右向きのフレーム
+            else:
+                self.image = self.frame[self.frame_index + 2]  # 左向きのフレーム
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height):
@@ -108,10 +145,7 @@ class Level:
             platform = Platform(*data)
             self.platforms.add(platform)
 
-        # ゴールの配置（遠くに設定）
-        goal_x = 2100
-        goal_y = 250 - GOAL_HEIGHT
-        self.goal.add(Goal(goal_x, goal_y))
+        self.goal.add(Goal(GOAL_X, GOAL_Y))
 
     def scroll_x(self):
         player = self.player
